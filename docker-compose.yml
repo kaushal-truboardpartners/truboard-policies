@@ -1,0 +1,38 @@
+# Local dev stack: pgvector-enabled Postgres + FastAPI backend.
+# Frontend runs separately via Vite (`cd frontend && npm run dev`) and is deployed separately.
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: truboard
+      POSTGRES_PASSWORD: truboard
+      POSTGRES_DB: truboard_policies
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U truboard -d truboard_policies']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: ./backend
+    env_file: .env
+    environment:
+      # Override DB host to the compose service name regardless of .env value.
+      DATABASE_URL: postgresql+asyncpg://truboard:truboard@db:5432/truboard_policies
+    ports:
+      - '8000:8000'
+    volumes:
+      # Bind-mount source for hot reload; keep the container's own .venv.
+      - ./backend:/app
+      - /app/.venv
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:

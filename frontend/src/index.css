@@ -1,0 +1,19 @@
+@import 'tailwindcss';
+
+/* Tailwind CSS v4 — CSS-first config. Theme tokens live here; no tailwind.config.js, no shadcn. */
+@theme {
+  --color-brand: #0f766e;
+  --color-brand-fg: #ffffff;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family:
+    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
