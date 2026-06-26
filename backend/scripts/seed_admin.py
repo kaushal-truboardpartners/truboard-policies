@@ -26,7 +26,7 @@ async def seed_admin(email: str, name: str | None) -> None:
         user = (await session.execute(select(User).where(User.email == email))).scalar_one_or_none()
         if user is None:
             user = User(
-                microsoft_oid=f"dev-{uuid.uuid4()}",
+                slug=f"dev-{uuid.uuid4()}",
                 email=email,
                 display_name=name or email.split("@")[0],
                 is_admin=True,

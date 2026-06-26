@@ -35,7 +35,7 @@ async def seed() -> None:
                 continue
             session.add(
                 User(
-                    microsoft_oid=f"dev-{uuid.uuid4()}",
+                    slug=f"dev-{uuid.uuid4()}",
                     email=spec["email"],
                     display_name=spec["display_name"],
                     is_admin=spec["is_admin"],

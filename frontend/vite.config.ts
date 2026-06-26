@@ -6,6 +6,7 @@ import tailwindcss from '@tailwindcss/vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  envDir: '..', // Read .env from the repo root (single .env for both backend and frontend)
   server: {
     port: 5173,
   },

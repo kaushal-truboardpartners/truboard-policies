@@ -26,11 +26,19 @@ Legend: `[ ]` todo · `[~]` in progress · `[x]` done · ⏸ awaiting review
 - [x] pgAdmin added to docker-compose (http://localhost:5050)
 - [x] Docker stack verified: migration ran, dev users seeded, tables + index confirmed
 
-## M2 — Auth & RBAC (dev-mode)  ⏸ awaiting review
-- [x] `auth/middleware.py`: Entra-ID JWT validation + `AUTH_DEV_MODE` X-Dev-User bypass; user upsert on first auth
-- [x] `require_admin` dependency (DB check, never JWT claim — per CLAUDE.md)
-- [x] `auth/routes.py`: login/callback/logout stubs (frontend handles MSAL); wired into main.py
-- [x] Tests: 5 passing (health, login route, logout, admin allow, admin reject 403)
+## M2 — Auth & RBAC (OAuth2/OIDC)  ⏸ awaiting review
+- [x] **Backend**: OAuth2 token introspection middleware (replaces JWT/Entra-ID)
+  - Token cache in `oauth_tokens` DB table; auto-create user on first IDP success
+  - Migration 0002: `slug` replaces `microsoft_oid` on users; `oauth_tokens` table
+  - `AUTH_DEV_MODE` X-Dev-User bypass preserved for local dev
+  - `require_admin` (DB check, never token claims — per CLAUDE.md)
+- [x] **Frontend**: OIDC auth via `oidc-client-ts` (replaces MSAL)
+  - `authSlice` (Redux), `reduxStorage` (tokens in Redux), `authconfig` (OIDC UserManager)
+  - `useAuth` hook, `LoginCallback`, `LogoutCallback`, `OAuthPage`
+  - `baseApi` sends real Bearer token (falls back to X-Dev-User in dev)
+  - Routing: `/callback`, `/logout`, `/login`, `/*` (guarded main layout)
+- [x] Config: Azure AD env vars replaced with `OAUTH_INTROSPECT_URL`, `OAUTH_CLIENT_ID`, `OAUTH_CLIENT_SECRET`
+- [x] Tests: 5 backend passing, 1 frontend passing; lint + build clean
 
 ## M3 — Storage & Documents API  `[ ]`  *(needs Azure Blob creds)*
 - [ ] `storage/blob.py`: Azure Blob client + fresh SAS (1h, read-only); blob_key stored, SAS never stored

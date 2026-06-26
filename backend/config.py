@@ -38,10 +38,10 @@ class Settings(BaseSettings):
     # ---- Database (secret: no default) ----
     database_url: str
 
-    # ---- Auth ----
-    azure_ad_tenant_id: str = ""
-    azure_ad_client_id: str = ""
-    frontend_azure_ad_client_id: str = ""
+    # ---- OAuth / Auth ----
+    oauth_introspect_url: str = ""  # Base URL of the OAuth provider (e.g. https://idp.truboard.com)
+    oauth_client_id: str = ""
+    oauth_client_secret: str = ""
     allowed_origin: str = "http://localhost:5173"
     auth_dev_mode: bool = False
     auth_dev_default_user: str = "admin@truboard.com"

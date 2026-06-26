@@ -1,18 +1,21 @@
 import { render, screen } from '@testing-library/react'
 import { Provider } from 'react-redux'
+import { MemoryRouter } from 'react-router-dom'
 import { describe, expect, it } from 'vitest'
 import App from './App'
 import { store } from './store'
 
+// App has its own BrowserRouter, so for testing we render individual route content.
+// The MainLayout checks isAuthenticated — without a real OIDC provider, it shows OAuthPage.
 describe('App shell', () => {
-  it('renders the three panels', () => {
+  it('renders the login callback route', () => {
     render(
       <Provider store={store}>
-        <App />
+        <MemoryRouter initialEntries={['/callback']}>
+          <App />
+        </MemoryRouter>
       </Provider>,
     )
-    expect(screen.getByText('TruBoard Policies')).toBeInTheDocument()
-    expect(screen.getByText(/PDF viewer/)).toBeInTheDocument()
-    expect(screen.getByText(/Chatbot/)).toBeInTheDocument()
+    expect(screen.getByText(/Processing login/)).toBeInTheDocument()
   })
 })

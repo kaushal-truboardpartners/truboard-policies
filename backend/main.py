@@ -39,11 +39,12 @@ def create_app() -> FastAPI:
         return {"status": "ok"}
 
     # ---- Routers (registered as each milestone lands) ----
-    # from auth.routes import router as auth_router
+    from auth.routes import router as auth_router
+
+    app.include_router(auth_router)
     # from documents.routes import router as documents_router
     # from chat.routes import router as chat_router
     # from admin.routes import router as admin_router
-    # app.include_router(auth_router)
     # app.include_router(documents_router)
     # app.include_router(chat_router)
     # app.include_router(admin_router)
