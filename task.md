@@ -18,16 +18,19 @@ Legend: `[ ]` todo · `[~]` in progress · `[x]` done · ⏸ awaiting review
 - [x] Root `docker-compose.yml`: pgvector/pg16 + backend (`docker compose config` valid; native boot + `/api/health` verified)
 - [ ] NOTE: full `docker compose build` not yet run (interrupted); will run at M1 when DB is wired in.
 
-## M1 — Database & models  `[ ]`
-- [ ] `db/connection.py` (async SQLAlchemy over asyncpg)
-- [ ] `db/models.py`: users, policies, policy_chunks (vector(1536)), ingestion_jobs (per FRD §9)
-- [ ] Alembic init + initial migration (CREATE EXTENSION vector, tables, HNSW partial index)
-- [ ] `scripts/seed_admin.py` + dev-user seed
+## M1 — Database & models  `[x]`
+- [x] `db/connection.py` (async SQLAlchemy over asyncpg)
+- [x] `db/models.py`: users, policies, policy_chunks (vector(1536)), ingestion_jobs (per FRD §9)
+- [x] Alembic init + initial migration (CREATE EXTENSION vector, tables, HNSW partial index)
+- [x] `scripts/seed_admin.py` + `scripts/seed_dev_users.py`
+- [x] pgAdmin added to docker-compose (http://localhost:5050)
+- [x] Docker stack verified: migration ran, dev users seeded, tables + index confirmed
 
-## M2 — Auth & RBAC (dev-mode)  `[ ]`
-- [ ] `auth/middleware.py`: Entra-ID JWT validation + `AUTH_DEV_MODE` X-Dev-User bypass; user upsert
-- [ ] `require_admin` dependency (DB check, never JWT claim)
-- [ ] `auth/routes.py`: login/callback/logout; 401/403 behaviour
+## M2 — Auth & RBAC (dev-mode)  ⏸ awaiting review
+- [x] `auth/middleware.py`: Entra-ID JWT validation + `AUTH_DEV_MODE` X-Dev-User bypass; user upsert on first auth
+- [x] `require_admin` dependency (DB check, never JWT claim — per CLAUDE.md)
+- [x] `auth/routes.py`: login/callback/logout stubs (frontend handles MSAL); wired into main.py
+- [x] Tests: 5 passing (health, login route, logout, admin allow, admin reject 403)
 
 ## M3 — Storage & Documents API  `[ ]`  *(needs Azure Blob creds)*
 - [ ] `storage/blob.py`: Azure Blob client + fresh SAS (1h, read-only); blob_key stored, SAS never stored

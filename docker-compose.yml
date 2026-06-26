@@ -8,7 +8,7 @@ services:
       POSTGRES_PASSWORD: truboard
       POSTGRES_DB: truboard_policies
     ports:
-      - '5432:5432'
+      - '5433:5432'  # 5433 on host to avoid conflict with existing Postgres
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -34,5 +34,22 @@ services:
       db:
         condition: service_healthy
 
+  # DB admin UI. http://localhost:5050 — login admin@truboard.com / admin.
+  # Add a server with host=db, port=5432, user=truboard, password=truboard.
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@truboard.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - '5050:80'
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    depends_on:
+      db:
+        condition: service_healthy
+
 volumes:
   pgdata:
+  pgadmin:
