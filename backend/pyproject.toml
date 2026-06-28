@@ -13,6 +13,7 @@ dependencies = [
     "alembic>=1.13",
     "pgvector>=0.3",
     "azure-storage-blob>=12.20",
+    "aiohttp>=3.9",  # async transport for azure-storage-blob.aio
     "openai>=1.40",
     "tiktoken>=0.7",
     "pdfplumber>=0.11",

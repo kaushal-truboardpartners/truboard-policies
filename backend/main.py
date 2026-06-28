@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from config import get_settings
+from storage.blob import BlobStorageService
 
 
 @asynccontextmanager
@@ -13,9 +14,10 @@ async def lifespan(app: FastAPI):
     # Validate settings at startup — fails loudly if required env vars are missing.
     settings = get_settings()
     app.state.settings = settings
-    # DB pool / clients are initialised here in later milestones.
+    # Process-wide Azure Blob client (async). Closed on shutdown.
+    app.state.blob_service = BlobStorageService(settings)
     yield
-    # Graceful shutdown / cleanup goes here.
+    await app.state.blob_service.close()
 
 
 def create_app() -> FastAPI:
@@ -39,15 +41,15 @@ def create_app() -> FastAPI:
         return {"status": "ok"}
 
     # ---- Routers (registered as each milestone lands) ----
+    from admin.routes import router as admin_router
     from auth.routes import router as auth_router
+    from documents.routes import router as documents_router
 
     app.include_router(auth_router)
-    # from documents.routes import router as documents_router
+    app.include_router(documents_router)
+    app.include_router(admin_router)
     # from chat.routes import router as chat_router
-    # from admin.routes import router as admin_router
-    # app.include_router(documents_router)
     # app.include_router(chat_router)
-    # app.include_router(admin_router)
 
     return app
 

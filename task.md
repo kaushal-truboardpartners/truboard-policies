@@ -41,8 +41,8 @@ Legend: `[ ]` todo · `[~]` in progress · `[x]` done · ⏸ awaiting review
 - [x] Tests: 5 backend passing, 1 frontend passing; lint + build clean
 
 ## M3 — Storage & Documents API  `[ ]`  *(needs Azure Blob creds)*
-- [ ] `storage/blob.py`: Azure Blob client + fresh SAS (1h, read-only); blob_key stored, SAS never stored
-- [ ] `documents/routes.py`: `GET /api/documents`, `GET /api/documents/{id}/url`
+- [x] `storage/blob.py`: Azure Blob client + fresh SAS (1h, read-only); blob_key stored, SAS never stored
+- [x] `documents/routes.py`: `GET /api/documents`, `GET /api/documents/{id}/url`
 
 ## M4 — Ingestion pipeline  `[ ]`  *(needs Azure OpenAI embeddings + sample PDFs)*
 - [ ] `admin/upload.py`: multipart, validation, SHA-256 dedup (incl. soft-deleted)
