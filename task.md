@@ -40,12 +40,12 @@ Legend: `[ ]` todo · `[~]` in progress · `[x]` done · ⏸ awaiting review
 - [x] Config: Azure AD env vars replaced with `OAUTH_INTROSPECT_URL`, `OAUTH_CLIENT_ID`, `OAUTH_CLIENT_SECRET`
 - [x] Tests: 5 backend passing, 1 frontend passing; lint + build clean
 
-## M3 — Storage & Documents API  `[ ]`  *(needs Azure Blob creds)*
+## M3 — Storage & Documents API  `[x]`
 - [x] `storage/blob.py`: Azure Blob client + fresh SAS (1h, read-only); blob_key stored, SAS never stored
 - [x] `documents/routes.py`: `GET /api/documents`, `GET /api/documents/{id}/url`
 
 ## M4 — Ingestion pipeline  `[ ]`  *(needs Azure OpenAI embeddings + sample PDFs)*
-- [ ] `admin/upload.py`: multipart, validation, SHA-256 dedup (incl. soft-deleted)
+- [x] `admin/upload.py`: multipart, validation, SHA-256 dedup (incl. soft-deleted)
 - [ ] `ingestion/extractor.py` (pdfplumber text+tables, dedup overlapping bboxes)
 - [ ] `ingestion/chunker.py` (recursive 800/120 overlap, tables atomic → Markdown, chunk_index)
 - [ ] `ingestion/embedder.py` (batch text-embedding-3-small)

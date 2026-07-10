@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from config import get_settings
+from llm.client import build_llm_client
 from storage.blob import BlobStorageService
 
 
@@ -16,8 +17,11 @@ async def lifespan(app: FastAPI):
     app.state.settings = settings
     # Process-wide Azure Blob client (async). Closed on shutdown.
     app.state.blob_service = BlobStorageService(settings)
+    # Process-wide LLM client (OpenAI or Azure OpenAI per LLM_PROVIDER). Closed on shutdown.
+    app.state.llm_client = build_llm_client(settings)
     yield
     await app.state.blob_service.close()
+    await app.state.llm_client.aclose()
 
 
 def create_app() -> FastAPI:
