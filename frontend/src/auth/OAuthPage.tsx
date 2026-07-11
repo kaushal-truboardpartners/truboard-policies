@@ -4,20 +4,22 @@ import { useAppSelector } from '../store/hooks'
 import { useAuth } from './useAuth'
 
 export default function OAuthPage() {
-  const { isAuthenticated, oAuthLogin, oAuthLogout } = useAuth()
+  const { isAuthenticated, isInitializing, oAuthLogin, oAuthLogout } = useAuth()
   const userInfo = useAppSelector((state) => state.auth.userInfo)
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!isAuthenticated && !isInitializing) {
       oAuthLogin()
     }
-  }, [isAuthenticated, oAuthLogin])
+  }, [isAuthenticated, isInitializing, oAuthLogin])
 
-  if (!isAuthenticated) {
+  if (isInitializing || !isAuthenticated) {
     return (
       <div className="flex h-screen flex-col items-center justify-center space-y-4 bg-gray-50">
         <Loader className="h-10 w-10 animate-spin text-gray-500" />
-        <p className="text-xl text-gray-600">Redirecting to login...</p>
+        <p className="text-xl text-gray-600">
+          {isInitializing ? 'Checking session...' : 'Redirecting to login...'}
+        </p>
       </div>
     )
   }

@@ -139,10 +139,20 @@ function MainLayout() {
 // Admin layout (guarded — /admin)
 // ---------------------------------------------------------------------------
 function AdminLayout() {
-  const { isAuthenticated } = useAuth()
-  // if (!isAuthenticated) return <Navigate to="/login" replace />
+  const { isAuthenticated, isInitializing } = useAuth()
 
   const { files, addFiles, uploadAll, removeFile, retryFile, clearAll, pendingCount } = useUpload()
+
+  if (isInitializing) {
+    return (
+      <div className="flex h-screen flex-col items-center justify-center space-y-4 bg-gray-50">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-t-transparent" style={{ borderColor: 'var(--color-truboard-primary)', borderTopColor: 'transparent' }} />
+        <p className="text-sm" style={{ color: 'var(--color-muted-fg)' }}>Checking session…</p>
+      </div>
+    )
+  }
+
+  if (!isAuthenticated) return <Navigate to="/login" replace />
 
   return (
     <div
@@ -212,7 +222,17 @@ function AdminLayout() {
 // Auth guard
 // ---------------------------------------------------------------------------
 function AuthGuard({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, isInitializing } = useAuth()
+
+  if (isInitializing) {
+    return (
+      <div className="flex h-screen flex-col items-center justify-center space-y-4 bg-gray-50">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-t-transparent" style={{ borderColor: 'var(--color-truboard-primary)', borderTopColor: 'transparent' }} />
+        <p className="text-sm" style={{ color: 'var(--color-muted-fg)' }}>Checking session…</p>
+      </div>
+    )
+  }
+
   if (!isAuthenticated) return <Navigate to="/login" replace />
   return <>{children}</>
 }

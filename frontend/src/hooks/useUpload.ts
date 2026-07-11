@@ -35,18 +35,13 @@ const MAX_FILE_SIZE = 50 * 1024 * 1024
  * - Updates per-file status/progress from SSE events
  * - Exposes removeFile, clearAll, retryFile
  */
+import { useAppSelector } from '../store/hooks'
+
 export function useUpload() {
   const [files, setFiles] = useState<UploadFile[]>([])
   const sseRefs = useRef<Record<string, EventSource>>({})
   const [uploadPolicy] = useUploadPolicyMutation()
-  const tokenRef = useRef<string | null>(null)
-
-  // Store the current auth token so SSE headers can use it.
-  // RTK Query already handles this for fetch-based calls, but EventSource
-  // doesn't support custom headers — we append the token as a query param.
-  const setToken = useCallback((token: string) => {
-    tokenRef.current = token
-  }, [])
+  const accessToken = useAppSelector((state) => state.auth.accessToken)
 
   const _updateFile = useCallback((id: string, patch: Partial<UploadFile>) => {
     setFiles((prev) => prev.map((f) => (f.id === id ? { ...f, ...patch } : f)))
@@ -55,7 +50,7 @@ export function useUpload() {
   const _openSSE = useCallback(
     (fileId: string, jobId: string) => {
       const apiBase = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000'
-      const token = tokenRef.current ?? ''
+      const token = accessToken ?? ''
       const url = `${apiBase}/api/admin/jobs/${jobId}/stream?token=${encodeURIComponent(token)}`
       const es = new EventSource(url)
 
@@ -86,7 +81,7 @@ export function useUpload() {
 
       sseRefs.current[fileId] = es
     },
-    [_updateFile],
+    [_updateFile, accessToken],
   )
 
   const addFiles = useCallback(
@@ -179,5 +174,5 @@ export function useUpload() {
 
   const pendingCount = files.filter((f) => f.status === 'pending').length
 
-  return { files, addFiles, uploadAll, removeFile, retryFile, clearAll, pendingCount, setToken }
+  return { files, addFiles, uploadAll, removeFile, retryFile, clearAll, pendingCount }
 }

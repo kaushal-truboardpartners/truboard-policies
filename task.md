@@ -80,9 +80,9 @@ Legend: `[ ]` todo · `[~]` in progress · `[x]` done · ⏸ awaiting review
 - [x] `Admin/UploadZone.tsx`, `FileRow.tsx` (progress bar, stage labels, retry), `ConfirmModal.tsx`
 - [x] `hooks/useUpload.ts` (upload + SSE EventSource job status, retry, clear) + AdminLayout in App.tsx
 
-## M10 — Production auth wiring & end-to-end verification  `[ ]`  *(needs live OAuth provider)*
+## M10 — Production auth wiring & end-to-end verification  `[x]`
 - NOTE: Auth is already fully implemented (M2). Frontend uses `oidc-client-ts` (not MSAL).
   Backend uses OAuth2 token introspection. M10 is a config + verification step only.
-- [ ] Set real OAuth provider env vars (`VITE_OAUTH_AUTHORITY`, `VITE_OAUTH_CLIENT_ID`, etc.)
-- [ ] Flip backend `AUTH_DEV_MODE=false`
-- [ ] Full end-to-end login → document load → chat → logout verification
+- [x] Set real OAuth provider env vars (`VITE_OAUTH_AUTHORITY`, `VITE_OAUTH_CLIENT_ID`, etc.)
+- [x] Flip backend `AUTH_DEV_MODE=false`
+- [x] Full end-to-end login → document load → chat → logout verification
