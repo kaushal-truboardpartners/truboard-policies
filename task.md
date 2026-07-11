@@ -44,14 +44,15 @@ Legend: `[ ]` todo · `[~]` in progress · `[x]` done · ⏸ awaiting review
 - [x] `storage/blob.py`: Azure Blob client + fresh SAS (1h, read-only); blob_key stored, SAS never stored
 - [x] `documents/routes.py`: `GET /api/documents`, `GET /api/documents/{id}/url`
 
-## M4 — Ingestion pipeline  `[ ]`  *(needs Azure OpenAI embeddings + sample PDFs)*
+## M4 — Ingestion pipeline  `[x]`
 - [x] `admin/upload.py`: multipart, validation, SHA-256 dedup (incl. soft-deleted)
-- [ ] `ingestion/extractor.py` (pdfplumber text+tables, dedup overlapping bboxes)
-- [ ] `ingestion/chunker.py` (recursive 800/120 overlap, tables atomic → Markdown, chunk_index)
-- [ ] `ingestion/embedder.py` (batch text-embedding-3-small)
-- [ ] `ingestion/job.py`: state machine + SSE emitter; try/except → failed; new DB session in task
-- [ ] `admin/versioning.py`: soft-delete + version increment; blob key `policies/v{version}/{id}.pdf`
-- [ ] `admin/routes.py`: POST /upload, GET /jobs/{id}/stream (SSE), GET /policies, POST /policies/{id}/replace
+- [x] `ingestion/extractor.py` (pdfplumber text+tables, dedup overlapping bboxes)
+- [x] `ingestion/chunker.py` (recursive 800/120 overlap, tables atomic → Markdown, chunk_index)
+- [x] `ingestion/embedder.py` (batch text-embedding-3-small)
+- [x] `ingestion/job.py`: state machine + SSE emitter; try/except → failed; new DB session in task
+- [x] `admin/versioning.py`: soft-delete + version increment; blob key `policies/v{version}/{id}.pdf`
+- [x] `admin/routes.py`: POST /upload-and-ingest, GET /jobs/{id}/stream (SSE), GET /policies, POST /policies/{id}/replace
+- [x] Tests: extractor bbox/overlap/markdown, chunker atomicity + heading inheritance, embedder order + error, versioning, new route endpoints
 
 ## M5 — RAG query pipeline  `[ ]`  *(needs Azure OpenAI chat)*
 - [ ] `prompts/system_prompt.txt` (from FRD §6.1, read from file)

@@ -1,7 +1,7 @@
 """Pydantic response schemas for the admin API."""
 
 import uuid
-from typing import Literal
+from typing import Any, Literal
 
 from pydantic import BaseModel
 
@@ -20,3 +20,31 @@ class UploadResultItem(BaseModel):
     policy_name: str | None = None
     version: int | None = None
     error: str | None = None
+
+
+class JobEnqueuedResponse(BaseModel):
+    """Returned immediately after enqueuing an ingestion job."""
+
+    job_id: uuid.UUID
+    document_id: uuid.UUID
+    status: str = "queued"
+
+
+class PolicyListItem(BaseModel):
+    """One row returned by GET /api/admin/policies."""
+
+    id: uuid.UUID
+    policy_name: str
+    version: int
+    is_deleted: bool
+
+
+class ReplaceResultItem(BaseModel):
+    """Response from POST /api/admin/policies/{id}/replace."""
+
+    old_id: uuid.UUID
+    new_id: uuid.UUID
+    policy_name: str
+    version: int
+    job_id: uuid.UUID
+    status: str = "queued"
