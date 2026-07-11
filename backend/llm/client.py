@@ -81,6 +81,8 @@ def build_llm_client(settings: Settings | None = None) -> LLMClient:
     )
 
 
-def get_llm_client(request) -> LLMClient:  # type: ignore[no-untyped-def]
+from fastapi import Request
+
+def get_llm_client(request: Request) -> LLMClient:
     """FastAPI dependency: the process-wide LLM client created in the app lifespan."""
     return request.app.state.llm_client
