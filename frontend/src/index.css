@@ -1,19 +1,103 @@
 @import 'tailwindcss';
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap');
 
-/* Tailwind CSS v4 — CSS-first config. Theme tokens live here; no tailwind.config.js, no shadcn. */
+/* =========================================================
+   Tailwind CSS v4 — CSS-first config.
+   All design tokens from the shared TruBoard theme live here.
+   No tailwind.config.js required.
+   ========================================================= */
+
 @theme {
-  --color-brand: #0f766e;
-  --color-brand-fg: #ffffff;
+  /* ---- Font ---- */
+  --font-family-sans: 'Open Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  /* ---- TruBoard Primary Palette ---- */
+  --color-truboard-primary-100: hsl(220 33% 98%);   /* #F8F9FA */
+  --color-truboard-primary-200: hsl(216 24% 89%);   /* #DCE1E8 */
+  --color-truboard-primary-300: hsl(217 22% 80%);   /* #C1C8D6 */
+  --color-truboard-primary-400: hsl(217 23% 71%);   /* #A5B0C3 */
+  --color-truboard-primary-500: hsl(219 24% 62%);   /* #8A97B1 */
+  --color-truboard-primary-600: hsl(219 31% 53%);   /* #6E7F9F */
+  --color-truboard-primary-700: hsl(219 41% 44%);   /* #53668D */
+  --color-truboard-primary-800: hsl(219 54% 35%);   /* #374E7A */
+  --color-truboard-primary-900: hsl(219 58% 26%);   /* #1C3568 */
+  --color-truboard-primary-950: hsl(220 100% 17%);  /* #001D56 */
+  --color-truboard-primary:     hsl(220 100% 17%);  /* #001D56 default */
+
+  /* ---- TruBoard Accent & Utility ---- */
+  --color-truboard-secondary: hsl(25 90% 59%);      /* #F58538 */
+  --color-truboard-accent:    hsl(0 0% 91%);        /* #E8E8E8 */
+  --color-truboard-disabled:  hsl(0 0% 65%);        /* #A6A2A2 */
+  --color-truboard-warning:   hsl(39 80% 65%);      /* #EDB95E */
+  --color-truboard-dimmed:    hsl(0 0% 44%);        /* #707070 */
+  --color-truboard-dark:      hsl(210 9% 31%);      /* #495057 */
+  --color-truboard-highlight: hsl(219 100% 75% / 40%); /* #82ACFF66 */
+
+  /* ---- Semantic aliases ---- */
+  --color-background:   hsl(220 33% 98%);
+  --color-foreground:   hsl(220 14% 20%);
+  --color-border:       hsl(220 13% 91%);
+  --color-input:        hsl(220 13% 91%);
+  --color-ring:         hsl(220 14% 20%);
+  --color-muted:        hsl(0 0% 91%);
+  --color-muted-fg:     hsl(0 0% 45%);
+  --color-destructive:  hsl(0 84% 60%);
+
+  /* ---- Font sizes ---- */
+  --font-size-xxs: 0.5rem;    /* 8px  */
+  --font-size-xs:  0.625rem;  /* 10px */
+  --font-size-sm:  0.75rem;   /* 12px */
+  --font-size-md:  0.875rem;  /* 14px */
+  --font-size-lg:  1rem;      /* 16px */
+  --font-size-xl:  1.25rem;   /* 20px */
+  --font-size-xxl: 1.5rem;    /* 24px */
+
+  /* ---- Spacing ---- */
+  --spacing-xxs: 0.125rem;
+  --spacing-xs:  0.25rem;
+  --spacing-sm:  0.375rem;
+  --spacing-md:  0.5rem;
+  --spacing-lg:  0.625rem;
+  --spacing-xl:  0.75rem;
+  --spacing-xxl: 1rem;
 }
 
-html,
-body,
-#root {
-  height: 100%;
+/* ---- Base resets ---- */
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+    border-color: var(--color-border);
+  }
+
+  html, body, #root {
+    height: 100%;
+    margin: 0;
+  }
+
+  html {
+    font-family: var(--font-family-sans);
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    font-size: var(--font-size-md);
+    line-height: 1.5;
+  }
 }
 
-body {
-  margin: 0;
-  font-family:
-    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-}
+/* ---- DPI / resolution scaling (Windows high-DPI) ---- */
+@media (max-width: 1600px) { html { font-size: calc(var(--font-size-md) * 0.95); } }
+@media (max-width: 1440px) { html { font-size: calc(var(--font-size-md) * 0.90); } }
+@media (max-width: 1366px) { html { font-size: calc(var(--font-size-md) * 0.85); } }
+@media (max-width: 1280px) { html { font-size: calc(var(--font-size-md) * 0.80); } }
+
+/* ---- Scrollbar styling ---- */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--color-truboard-primary-300); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-truboard-primary-500); }

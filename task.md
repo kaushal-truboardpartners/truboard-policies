@@ -63,14 +63,14 @@ Legend: `[ ]` todo · `[~]` in progress · `[x]` done · ⏸ awaiting review
 - [x] `chat/pipeline.py` (temperature 0, max 800, timeout retry, JSON parse fallback)
 - [x] `POST /api/chat/message`, `DELETE /api/chat/session`; backend tests
 
-## M6 — Frontend foundation  `[ ]`
-- [ ] Three-panel grid `App.tsx`, Tailwind 4 theme, routing (main + guarded /admin)
-- [ ] Redux store finalized, RTK Query baseApi with auth-header injection point, shared types
+## M6 — Frontend foundation  `[x]`
+- [x] Three-panel grid `App.tsx`, Tailwind 4 theme from shared TruBoard design tokens, routing (main + guarded /admin redirect)
+- [x] Redux store: `activeDocumentSlice` added; `documentsApi` (listDocuments, lazyGetDocumentUrl); `index.css` full brand token system
 
-## M7 — Frontend: sidebar + PDF viewer  `[ ]`
-- [ ] `Sidebar/PolicyList.tsx` + `hooks/useActiveDocument.ts` (alphabetical, highlight, first-doc preload)
-- [ ] `Viewer/PDFViewer.tsx` + `hooks/usePDFViewer.ts` (PDF.js, scrollPageIntoView, 403 SAS refresh)
-- [ ] `Viewer/ViewerFallback.tsx` (download link)
+## M7 — Frontend: sidebar + PDF viewer  `[x]`
+- [x] `Sidebar/PolicyList.tsx` + `hooks/useActiveDocument.ts` (alphabetical, active highlight, first-doc preload)
+- [x] `Viewer/PDFViewer.tsx` + `hooks/usePDFViewer.ts` (PDF.js, scrollToPage, 403 SAS re-fetch)
+- [x] `Viewer/ViewerFallback.tsx` (download link, FRD FR-PDF-009)
 
 ## M8 — Frontend: chat  `[ ]`
 - [ ] `Chat/ChatPanel.tsx`, `MessageBubble.tsx` (Markdown), `CitationButton.tsx`, `SwitchToast.tsx`
@@ -80,6 +80,9 @@ Legend: `[ ]` todo · `[~]` in progress · `[x]` done · ⏸ awaiting review
 - [ ] `Admin/UploadZone.tsx`, `FileRow.tsx`, `ConfirmModal.tsx`
 - [ ] `hooks/useUpload.ts` (upload + SSE job status via EventSource, stage labels, retry)
 
-## M10 — MSAL integration & end-to-end wiring  `[ ]`  *(needs user's MSAL code)*
-- [ ] Integrate MSAL: `lib/msal.ts`, acquireTokenSilent, RTK Query bearer token, login/logout
-- [ ] Flip backend `AUTH_DEV_MODE=false`; full end-to-end verification
+## M10 — Production auth wiring & end-to-end verification  `[ ]`  *(needs live OAuth provider)*
+- NOTE: Auth is already fully implemented (M2). Frontend uses `oidc-client-ts` (not MSAL).
+  Backend uses OAuth2 token introspection. M10 is a config + verification step only.
+- [ ] Set real OAuth provider env vars (`VITE_OAUTH_AUTHORITY`, `VITE_OAUTH_CLIENT_ID`, etc.)
+- [ ] Flip backend `AUTH_DEV_MODE=false`
+- [ ] Full end-to-end login → document load → chat → logout verification
