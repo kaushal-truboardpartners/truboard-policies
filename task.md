@@ -54,14 +54,14 @@ Legend: `[ ]` todo · `[~]` in progress · `[x]` done · ⏸ awaiting review
 - [x] `admin/routes.py`: POST /upload-and-ingest, GET /jobs/{id}/stream (SSE), GET /policies, POST /policies/{id}/replace
 - [x] Tests: extractor bbox/overlap/markdown, chunker atomicity + heading inheritance, embedder order + error, versioning, new route endpoints
 
-## M5 — RAG query pipeline  `[ ]`  *(needs Azure OpenAI chat)*
-- [ ] `prompts/system_prompt.txt` (from FRD §6.1, read from file)
-- [ ] `chat/session.py` (in-memory history) + in-process rate limiter (30/60min, 429 + Retry-After)
-- [ ] `chat/rewriter.py` (Hinglish detect + rewrite)
-- [ ] `chat/retrieval.py` (two-phase scoped/global, threshold 0.75, dedup 0.97, redirect metadata)
-- [ ] `chat/context.py` (prompt assembly + tiktoken 6000-tok budget, trim oldest)
-- [ ] `chat/pipeline.py` (temperature 0, max 800, timeout retry, JSON parse fallback)
-- [ ] `POST /api/chat/message`, `DELETE /api/chat/session`; backend tests
+## M5 — RAG query pipeline  `[x]`
+- [x] `prompts/system_prompt.txt` (from FRD §6.1, read from file)
+- [x] `chat/session.py` (in-memory history) + in-process rate limiter (30/60min, 429 + Retry-After)
+- [x] `chat/rewriter.py` (Hinglish detect + rewrite)
+- [x] `chat/retrieval.py` (two-phase scoped/global, threshold 0.75, dedup 0.97, redirect metadata)
+- [x] `chat/context.py` (prompt assembly + tiktoken 6000-tok budget, trim oldest)
+- [x] `chat/pipeline.py` (temperature 0, max 800, timeout retry, JSON parse fallback)
+- [x] `POST /api/chat/message`, `DELETE /api/chat/session`; backend tests
 
 ## M6 — Frontend foundation  `[ ]`
 - [ ] Three-panel grid `App.tsx`, Tailwind 4 theme, routing (main + guarded /admin)
