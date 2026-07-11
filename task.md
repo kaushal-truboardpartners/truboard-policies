@@ -72,13 +72,13 @@ Legend: `[ ]` todo · `[~]` in progress · `[x]` done · ⏸ awaiting review
 - [x] `Viewer/PDFViewer.tsx` + `hooks/usePDFViewer.ts` (PDF.js, scrollToPage, 403 SAS re-fetch)
 - [x] `Viewer/ViewerFallback.tsx` (download link, FRD FR-PDF-009)
 
-## M8 — Frontend: chat  `[ ]`
-- [ ] `Chat/ChatPanel.tsx`, `MessageBubble.tsx` (Markdown), `CitationButton.tsx`, `SwitchToast.tsx`
-- [ ] `hooks/useChat.ts` (submit, redirect, session) + chat slice; confidence styling, rate-limit countdown
+## M8 — Frontend: chat  `[x]`
+- [x] `Chat/ChatPanel.tsx`, `MessageBubble.tsx` (Markdown via react-markdown), `CitationButton.tsx`, `SwitchToast.tsx`
+- [x] `hooks/useChat.ts` (submit, redirect, session) + chatSlice + chatAdminApi; confidence styling, rate-limit countdown
 
-## M9 — Frontend: admin  `[ ]`
-- [ ] `Admin/UploadZone.tsx`, `FileRow.tsx`, `ConfirmModal.tsx`
-- [ ] `hooks/useUpload.ts` (upload + SSE job status via EventSource, stage labels, retry)
+## M9 — Frontend: admin  `[x]`
+- [x] `Admin/UploadZone.tsx`, `FileRow.tsx` (progress bar, stage labels, retry), `ConfirmModal.tsx`
+- [x] `hooks/useUpload.ts` (upload + SSE EventSource job status, retry, clear) + AdminLayout in App.tsx
 
 ## M10 — Production auth wiring & end-to-end verification  `[ ]`  *(needs live OAuth provider)*
 - NOTE: Auth is already fully implemented (M2). Frontend uses `oidc-client-ts` (not MSAL).
