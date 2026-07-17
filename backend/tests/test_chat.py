@@ -229,6 +229,26 @@ class TestPipelineParser:
         assert answer == raw.strip()
         assert meta == {}
 
+    def test_extract_json_nested(self):
+        from chat.pipeline import _extract_json
+
+        raw = (
+            "Here is the answer.\n\n"
+            "```json\n"
+            "{\n"
+            '  "citations": [{"policy": "HR Policy v2", "page": 5, "section": "Leave"}],\n'
+            '  "redirect_document_id": null,\n'
+            '  "redirect_page": null,\n'
+            '  "confidence": "found"\n'
+            "}\n"
+            "```"
+        )
+        answer, meta = _extract_json(raw)
+        assert answer == "Here is the answer."
+        assert meta["confidence"] == "found"
+        assert len(meta["citations"]) == 1
+        assert meta["citations"][0]["policy"] == "HR Policy v2"
+
     def test_parse_response_citations(self):
         from chat.pipeline import _parse_response
         from chat.retrieval import RetrievalResult

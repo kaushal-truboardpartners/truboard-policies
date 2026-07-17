@@ -103,15 +103,14 @@ def build_messages(
             history_budget,
         )
 
-    # Assemble messages.
-    messages: list[dict[str, str]] = [
-        {"role": "system", "content": SYSTEM_PROMPT},
-    ]
-
+    # Assemble system message.
+    system_content = SYSTEM_PROMPT
     if chunks_text:
-        messages.append(
-            {"role": "system", "content": f"POLICY EXCERPTS:\n\n{chunks_text}"}
-        )
+        system_content += f"\n\nPOLICY EXCERPTS:\n\n{chunks_text}"
+
+    messages: list[dict[str, str]] = [
+        {"role": "system", "content": system_content},
+    ]
 
     for role, content in trimmed_history:
         messages.append({"role": role, "content": content})

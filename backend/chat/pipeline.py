@@ -79,21 +79,35 @@ _JSON_BLOCK_RE = re.compile(r"\{[^{}]*\}", re.DOTALL)
 def _extract_json(text: str) -> tuple[str, dict]:
     """Split ``text`` into (answer_part, parsed_json).
 
-    Finds the last {...} block that contains a 'confidence' key.
+    Finds the last {...} block that contains a 'confidence' key, scanning
+    backwards to support nested curly braces.
     Falls back to empty dict on any parse failure (FRD FR-RAG-017).
     """
-    matches = list(_JSON_BLOCK_RE.finditer(text))
-    for m in reversed(matches):
-        raw = m.group()
+    text_stripped = text.strip()
+    end_idx = text_stripped.rfind("}")
+    if end_idx == -1:
+        logger.warning("Failed to find any '}' in LLM response")
+        return text.strip(), {}
+
+    # Scan backwards for candidate opening braces.
+    idx = text_stripped.rfind("{", 0, end_idx)
+    while idx != -1:
+        candidate = text_stripped[idx : end_idx + 1]
         try:
-            parsed = json.loads(raw)
-            if "confidence" in parsed:
-                answer = text[: m.start()].strip()
+            parsed = json.loads(candidate)
+            if isinstance(parsed, dict) and "confidence" in parsed:
+                answer = text_stripped[:idx].strip()
+                # Clean up markdown code block markers if the LLM wrapped the JSON.
+                if answer.endswith("```json"):
+                    answer = answer[:-7].strip()
+                elif answer.endswith("```"):
+                    answer = answer[:-3].strip()
                 return answer, parsed
         except json.JSONDecodeError:
-            continue
+            pass
+        idx = text_stripped.rfind("{", 0, idx)
 
-    logger.warning("Failed to parse structured JSON from LLM response")
+    logger.warning("Failed to parse structured JSON containing 'confidence' from LLM response")
     return text.strip(), {}
 
 
