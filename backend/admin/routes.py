@@ -5,7 +5,9 @@ All endpoints require admin role (DB-verified via require_admin — CLAUDE.md).
 
 from __future__ import annotations
 
+import asyncio
 import hashlib
+import json
 import uuid
 
 from fastapi import APIRouter, BackgroundTasks, Depends, File, HTTPException, UploadFile
@@ -22,7 +24,7 @@ from admin.schemas import (
 )
 from admin.upload import process_upload
 from admin.versioning import create_replacement_policy, soft_delete_policy
-from auth.middleware import require_admin
+from auth.middleware import get_current_user_from_token, require_admin, require_admin_user
 from config import Settings, get_settings
 from db.connection import get_db
 from db.models import IngestionJob, Policy, User
@@ -125,8 +127,9 @@ async def upload_and_ingest(
 @router.get("/jobs/{job_id}/stream")
 async def stream_job_progress(
     job_id: uuid.UUID,
-    _user: User = Depends(require_admin),
+    token: str | None = None,
     db: AsyncSession = Depends(get_db),
+    settings: Settings = Depends(get_settings),
 ) -> StreamingResponse:
     """SSE stream of ingestion job progress events.
 
@@ -135,13 +138,15 @@ async def stream_job_progress(
 
     The stream closes when a 'complete' or 'failed' event is emitted.
     """
+    # Authenticate: EventSource cannot send headers, so we accept the bearer
+    # token as a query parameter for this SSE-only endpoint.
+    user = await get_current_user_from_token(token, db, settings)
+    await require_admin_user(user)
+
     # Verify the job exists.
     job = await db.get(IngestionJob, job_id)
     if job is None:
         raise HTTPException(status_code=404, detail="Job not found")
-
-    import asyncio
-    import json
 
     q = get_queue(job_id)
 

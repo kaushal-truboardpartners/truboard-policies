@@ -74,7 +74,7 @@ export function useUpload() {
       }
 
       es.onerror = () => {
-        _updateFile(fileId, { status: 'failed', error: 'Connection to job stream lost.' })
+        _updateFile(fileId, { status: 'failed', progress: 0, error: 'Connection to job stream lost.' })
         es.close()
         delete sseRefs.current[fileId]
       }
