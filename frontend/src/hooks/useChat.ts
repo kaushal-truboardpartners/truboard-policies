@@ -15,7 +15,7 @@ import type { Policy } from '../types'
  * - Handle 429 → start countdown timer
  * - clearChat: DELETE /api/chat/session + clear Redux messages
  */
-export function useChat(activeDocument: Policy | null) {
+export function useChat(activeDocument: Policy | null, onRedirect?: (page: number) => void) {
   const dispatch = useAppDispatch()
   const messages = useAppSelector((s) => s.chat.messages)
   const isLoading = useAppSelector((s) => s.chat.isLoading)
@@ -69,7 +69,10 @@ export function useChat(activeDocument: Policy | null) {
         // Redirect: switch viewer to different document if instructed.
         if (result.redirect_document_id) {
           const redirectDoc = documents.find((d) => d.id === result.redirect_document_id)
-          if (redirectDoc) dispatch(setActiveDocument(redirectDoc))
+          if (redirectDoc) {
+            dispatch(setActiveDocument(redirectDoc))
+            if (result.redirect_page) onRedirect?.(result.redirect_page)
+          }
         }
       } catch (err: unknown) {
         // Handle rate-limit (429) with Retry-After.

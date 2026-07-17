@@ -11,7 +11,7 @@ import { ChatPanel } from './components/Chat/ChatPanel'
 import { UploadZone } from './components/Admin/UploadZone'
 import { FileRow } from './components/Admin/FileRow'
 import { useUpload } from './hooks/useUpload'
-import type { Policy } from './types'
+import type { Citation, Policy } from './types'
 
 // ---------------------------------------------------------------------------
 // Sidebar
@@ -91,7 +91,7 @@ function Sidebar({ onDocumentChange }: { onDocumentChange: (d: Policy) => void }
 // Main three-panel layout
 // ---------------------------------------------------------------------------
 function MainLayout() {
-  const { activeDocument } = useActiveDocument()
+  const { activeDocument, documents, setActive } = useActiveDocument()
   const [targetPage, setTargetPage] = useState<number | null>(null)
   const [lastSwitchedDocName, setLastSwitchedDocName] = useState<string | null>(null)
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null)
@@ -105,6 +105,15 @@ function MainLayout() {
       setTargetPage(null)
     }
   }, [])
+
+  const onCitationOpen = useCallback((citation: Citation) => {
+    const doc = documents.find((d) => d.policy_name === citation.policy)
+    if (doc && doc.id !== activeDocument?.id) {
+      setActive(doc)
+    }
+    console.log('Citation clicked:', citation, 'Active document:', doc)
+    setTargetPage(citation.page)
+  }, [documents, activeDocument, setActive])
 
   return (
     <div className="grid h-full" style={{ gridTemplateColumns: '260px 1fr 400px' }}>
@@ -127,7 +136,8 @@ function MainLayout() {
       >
         <ChatPanel
           activeDocument={activeDocument}
-          onScrollToPage={(page) => setTargetPage(page)}
+          onCitationOpen={onCitationOpen}
+          onDocumentRedirect={(page) => setTargetPage(page)}
           lastSwitchedDocName={lastSwitchedDocName}
         />
       </section>

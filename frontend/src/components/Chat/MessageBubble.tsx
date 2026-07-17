@@ -25,7 +25,7 @@ const CONFIDENCE_STYLES: Record<Confidence, React.CSSProperties> = {
 // ---------------------------------------------------------------------------
 interface CitationButtonProps {
   citation: Citation
-  onOpen: (page: number) => void
+  onOpen: (citation: Citation) => void
 }
 
 export function CitationButton({ citation, onOpen }: CitationButtonProps) {
@@ -38,7 +38,7 @@ export function CitationButton({ citation, onOpen }: CitationButtonProps) {
       <button
         type="button"
         id={`citation-open-p${citation.page}`}
-        onClick={() => onOpen(citation.page)}
+        onClick={() => onOpen(citation)}
         className="rounded px-2 py-0.5 text-xs font-medium transition-colors"
         style={{
           backgroundColor: 'var(--color-truboard-primary-200)',
@@ -64,7 +64,7 @@ export function CitationButton({ citation, onOpen }: CitationButtonProps) {
 // ---------------------------------------------------------------------------
 interface MessageBubbleProps {
   message: ChatMessage
-  onCitationOpen: (page: number) => void
+  onCitationOpen: (citation: Citation) => void
 }
 
 export function MessageBubble({ message, onCitationOpen }: MessageBubbleProps) {

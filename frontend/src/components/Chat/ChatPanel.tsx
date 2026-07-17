@@ -4,10 +4,14 @@ import { SwitchToast } from './SwitchToast'
 import { useChat } from '../../hooks/useChat'
 import type { Policy } from '../../types'
 
+import type { Citation } from '../../types'
+
 interface ChatPanelProps {
   activeDocument: Policy | null
-  /** Called when citation "Open →" is clicked; triggers PDF scroll. */
-  onScrollToPage: (page: number) => void
+  /** Called when citation "Open →" is clicked; switches document if needed + scrolls. */
+  onCitationOpen: (citation: Citation) => void
+  /** Called when the AI redirects to a different document; page to scroll to. */
+  onDocumentRedirect: (page: number) => void
   /** Name of the last switched-to document, for the toast. */
   lastSwitchedDocName: string | null
 }
@@ -21,8 +25,8 @@ interface ChatPanelProps {
  * - Confidence styling delegated to MessageBubble
  * - SwitchToast on document redirect
  */
-export function ChatPanel({ activeDocument, onScrollToPage, lastSwitchedDocName }: ChatPanelProps) {
-  const { messages, isLoading, rateLimitCountdown, submit, clearChat } = useChat(activeDocument)
+export function ChatPanel({ activeDocument, onCitationOpen, onDocumentRedirect, lastSwitchedDocName }: ChatPanelProps) {
+  const { messages, isLoading, rateLimitCountdown, submit, clearChat } = useChat(activeDocument, onDocumentRedirect)
   const [inputValue, setInputValue] = useState('')
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
@@ -86,7 +90,7 @@ export function ChatPanel({ activeDocument, onScrollToPage, lastSwitchedDocName 
         )}
 
         {messages.map((msg) => (
-          <MessageBubble key={msg.id} message={msg} onCitationOpen={onScrollToPage} />
+          <MessageBubble key={msg.id} message={msg} onCitationOpen={onCitationOpen} />
         ))}
 
         {/* Typing indicator */}
